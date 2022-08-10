@@ -27,14 +27,21 @@ object MainService {
                                    productDate: LocalDateTime
                                  ): Option[Int] = {
 
-    val diff = ChronoUnit.MONTHS.between(orderDate, productDate)
+    val diff = ChronoUnit.MONTHS.between(productDate, orderDate)
 
     if (diff > 0 && diff.isValidInt)
       Some(diff.toInt)
     else
       None
-
   }
+
+  def orderProductAges(order: Order): List[Int] = {
+    order.
+      items.
+      map(item => datesDifferenceInMonths(order.placedAt, item.product.creationDate)).
+      flatten
+  }
+
 
 
 }
