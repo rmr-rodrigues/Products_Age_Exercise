@@ -3,6 +3,7 @@ package com.exercise.older.products
 import com.exercise.older.products.order.Order
 
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 object MainService {
 
@@ -21,7 +22,19 @@ object MainService {
       Some(list)
   }
 
+  def datesDifferenceInMonths(
+                                   orderDate: LocalDateTime,
+                                   productDate: LocalDateTime
+                                 ): Option[Int] = {
 
+    val diff = ChronoUnit.MONTHS.between(orderDate, productDate)
+
+    if (diff > 0 && diff.isValidInt)
+      Some(diff.toInt)
+    else
+      None
+
+  }
 
 
 }
