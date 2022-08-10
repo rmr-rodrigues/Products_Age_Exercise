@@ -13,8 +13,17 @@ object Main extends App {
     val startDateTime = Try { LocalDateTime.parse(startDate, formatter) }.toOption
     val endDatetime = Try { LocalDateTime.parse(endDate, formatter) }.toOption
 
-    println(s"Start Date: $startDateTime - End Date: $endDatetime")
+    val datesAreValid = (for {
+      s <- startDateTime
+      e <- endDatetime
+    } yield s.isBefore(e)).getOrElse(false)
 
+    if (!datesAreValid)
+      println("There seems to be some problem with the dates, try again!")
+    else
+      {
+        println(s"Start Date: $startDateTime - End Date: $endDatetime")
+      }
   }else {
     println("There seems to be some problem with the arguments, try again!")
   }
