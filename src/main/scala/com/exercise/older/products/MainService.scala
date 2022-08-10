@@ -37,9 +37,14 @@ object MainService {
 
   def orderProductAges(order: Order): List[Int] = {
     order.
-      items.
-      map(item => datesDifferenceInMonths(order.placedAt, item.product.creationDate)).
-      flatten
+      items.flatMap(item => datesDifferenceInMonths(order.placedAt, item.product.creationDate))
+  }
+
+  def ordersToMapOfAges(orders: List[Order]): Map[Int, Int] = {
+
+    val productsAges: List[Int] = orders.flatMap(orderProductAges)
+
+    productsAges.groupBy(identity).view.mapValues(l => l.length).toMap
   }
 
 

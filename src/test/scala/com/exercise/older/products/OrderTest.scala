@@ -32,9 +32,12 @@ class OrderTest
     }
   }
 
-  "Order product ages should" - {
+  "Product ages in an order should" - {
     "return a list of ages in months" in {
       MainService.orderProductAges(order1) shouldBe List(11, 10, 9)
+    }
+    "return an empty list if product ages minor than one" in {
+      MainService.orderProductAges(order3) shouldBe List()
     }
   }
 }
