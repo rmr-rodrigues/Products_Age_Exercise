@@ -1,18 +1,26 @@
 package com.exercise.older.products
 
 import com.exercise.older.products.MainData._
-import com.exercise.older.products.MainService.{orderProductAges, ordersInTheInterval, ordersToMapOfAges}
+import com.exercise.older.products.MainService._
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import scala.util.Try
 
 object Main extends App {
-// "2018-01-01 00:00:00" "2019-01-01 00:00:00"
-  if (args.length == 2) {
+  // "2018-01-01 00:00:00" "2019-01-01 00:00:00" "(1-3, 4-6, 7-12, >12)"
+  val defaultIntervals = "(1-3, 4-6, 7-12, >12)"
+
+  if (args.length >= 2 && args.length <=3) {
     val startDate = args(0)
     val endDate = args(1)
+    val intervals = args.length match {
+      case 2 => defaultIntervals
+      case 3 => args(2)
+    }
+
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
     val startDateTime = Try {
       LocalDateTime.parse(startDate, formatter)
     }.toOption
@@ -26,23 +34,22 @@ object Main extends App {
     } yield s.isBefore(e)).getOrElse(false)
 
     if (datesAreValid) {
-      println(s"Start Date: $startDateTime - End Date: $endDatetime")
-      println("---------------------------")
-      // TODO Replace the get method for something that doesn't throw and exception
-      println("Orders in the interval: " + ordersInTheInterval(ordersList, startDateTime.get, endDatetime.get))
-//      println("---------------------------")
-//      println(datesDifferenceInMonths(date20181231, date20180101))
-//      println(datesDifferenceInMonths(date20181231, date20180501))
-//      println(datesDifferenceInMonths(date20181231, date20181201))
-//      println(datesDifferenceInMonths(date20181231, date20190101))
-      println("---------------------------")
-      println("Order1 Products age: " + orderProductAges(order1))
-      println("Order2 Products age: " + orderProductAges(order2))
-      println("Order3 Products age: " + orderProductAges(order3))
-      println("---------------------------")
-      val ages = ordersToMapOfAges(ordersList)//Map.empty[Int, Int]
+      val result = for {
+        startDate <- startDateTime
+        endDate <- endDatetime
+        optionOrders = ordersInTheInterval(ordersList, startDate, endDate)
+        orders <- optionOrders
+        allIntervals = parseStringToIntervals(intervals)
+        ages = ordersToMapOfAges(orders)
+        finalMap = insertAgesInToFinalMap(allIntervals, ages)
+        finalString = finalMapToString(finalMap)
+      } yield finalString
 
-      println(ages)
+      result match {
+        case Some(value) if value.isEmpty => println("There are no values to present!")
+        case Some(value) => println(value)
+        case None => println("There seems to be some problem with the arguments, try again!")
+      }
     }
     else {
       println("There seems to be some problem with the dates, try again!")
