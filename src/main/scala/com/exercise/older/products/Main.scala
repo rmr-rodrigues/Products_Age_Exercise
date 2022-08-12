@@ -9,8 +9,11 @@ import scala.util.Try
 
 object Main extends App {
   // Application arguments example: "2018-01-01 00:00:00" "2019-01-01 00:00:00" "(1-3, 4-6, 7-12, >12)"
-  val defaultIntervals = "(1-3, 4-6, 7-12, >12)"
 
+  val defaultIntervals = "(1-3, 4-6, 7-12, >12)"
+  val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+  // In case there are no arguments the default ones are used
   if (args.length >= 2 && args.length <=3) {
     val startDate = args(0)
     val endDate = args(1)
@@ -19,14 +22,8 @@ object Main extends App {
       case 3 => args(2)
     }
 
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-
-    val startDateTime = Try {
-      LocalDateTime.parse(startDate, formatter)
-    }.toOption
-    val endDatetime = Try {
-      LocalDateTime.parse(endDate, formatter)
-    }.toOption
+    val startDateTime = Try { LocalDateTime.parse(startDate, formatter) }.toOption
+    val endDatetime = Try { LocalDateTime.parse(endDate, formatter) }.toOption
 
     val datesAreValid = (for {
       s <- startDateTime

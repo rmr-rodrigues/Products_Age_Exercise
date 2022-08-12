@@ -15,7 +15,7 @@ object MainService {
                            endDate: LocalDateTime
                          ): Option[List[Order]] = {
 
-    // TODO Verify if is better to insert the start and end date inclusive
+    // The extremes of the date range are excluded.
     val list = orders.filter(order => order.placedAt.isAfter(startDate) && order.placedAt.isBefore(endDate))
 
     if (list == List.empty[Order]) None
@@ -95,7 +95,7 @@ object MainService {
   }
 
   def parseStringToIntervals(string: String): List[(Int, Int)] = {
-    // string format = "(1-3, 4-6, 7-12, >12)"
+    // string format example = "(1-3, 4-6, 7-12, >12)"
 
     val validateIntervalRegex = """(^\d+-\d+)""".r
     val validateGreaterThanInterval = """(^>\d+)""".r
@@ -122,6 +122,7 @@ object MainService {
         }.toOption
       }
 
+      // It will be used in the next version!!
       def stringMinorThanToOption(string: String): Option[(Int, Int)] = {
         val value = string.substring(1)
         Try {
@@ -132,7 +133,7 @@ object MainService {
       s match {
         case ss if validateIntervalRegex.matches(ss) => stringIntervalToOption(ss)
         case ss if validateGreaterThanInterval.matches(ss) => stringGreaterThanToOption(ss)
-        case ss if validateMinorThanInterval.matches(ss) => stringMinorThanToOption(ss)
+        //case ss if validateMinorThanInterval.matches(ss) => stringMinorThanToOption(ss)
         case _ => None
       }
 
