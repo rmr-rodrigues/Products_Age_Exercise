@@ -4,7 +4,7 @@ import com.exercise.older.products.MainData._
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 
-class OrderTest
+class MainTest
   extends AnyFreeSpec
     with Matchers {
 
