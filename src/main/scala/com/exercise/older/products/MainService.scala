@@ -70,14 +70,12 @@ object MainService {
         if (i._1 > i._2) {
           val interval = ages.keys.filter(_ > i._1).toList
           val intervalTotal = groupAgesByInterval(interval, ages)
-          //        println(s"Interval: $interval - Total: $intervalTotal")
           if (intervalTotal > 0) Map((i._1, i._2) -> intervalTotal)
           else Map.empty[(Int, Int), Int]
-          // Normal interval with start and end value
+          // Normal interval with start and end values
         } else {
           val interval = intervalToList(i)
           val intervalTotal = groupAgesByInterval(interval, ages)
-          //        println(s"Interval: $interval - Total: $intervalTotal")
           if (intervalTotal > 0) Map((i._1, i._2) -> intervalTotal)
           else Map.empty[(Int, Int), Int]
         }
@@ -97,7 +95,7 @@ object MainService {
   }
 
   def parseStringToIntervals(string: String): List[(Int, Int)] = {
-    // string = "(1-3, 4-6, 7-12, >12)"
+    // string format = "(1-3, 4-6, 7-12, >12)"
 
     val validateIntervalRegex = """(^\d+-\d+)""".r
     val validateGreaterThanInterval = """(^>\d+)""".r

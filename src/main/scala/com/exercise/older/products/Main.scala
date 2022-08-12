@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter
 import scala.util.Try
 
 object Main extends App {
-  // "2018-01-01 00:00:00" "2019-01-01 00:00:00" "(1-3, 4-6, 7-12, >12)"
+  // Application arguments example: "2018-01-01 00:00:00" "2019-01-01 00:00:00" "(1-3, 4-6, 7-12, >12)"
   val defaultIntervals = "(1-3, 4-6, 7-12, >12)"
 
   if (args.length >= 2 && args.length <=3) {
